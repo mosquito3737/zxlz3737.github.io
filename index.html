@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>父母教养风格测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #4a6fa5, #6a98d3);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .description {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .instructions {
+            background-color: #e8f4ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px;
+            font-size: 14px;
+            border-left: 4px solid #4a6fa5;
+        }
+        
+        .progress-container {
+            padding: 0 20px;
+            margin-top: 20px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #e0e6ef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #4a6fa5, #6a98d3);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            text-align: right;
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .question-container {
+            padding: 20px;
+        }
+        
+        .question {
+            margin-bottom: 25px;
+            padding: 20px;
+            background-color: #f9fbfd;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+        }
+        
+        .question-number {
+            font-weight: bold;
+            color: #4a6fa5;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .question-text {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background-color: white;
+            border: 1px solid #e0e6ef;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .option:hover {
+            background-color: #f0f5ff;
+            border-color: #c5d5f0;
+        }
+        
+        .option.selected {
+            background-color: #e8f4ff;
+            border-color: #4a6fa5;
+        }
+        
+        .option input {
+            margin-right: 10px;
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        #prev-btn {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        
+        #prev-btn:hover:not(:disabled) {
+            background-color: #e0e0e0;
+        }
+        
+        #next-btn, #submit-btn {
+            background: linear-gradient(135deg, #4a6fa5, #6a98d3);
+            color: white;
+        }
+        
+        #next-btn:hover, #submit-btn:hover {
+            background: linear-gradient(135deg, #3a5a85, #5a88c3);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .result-container {
+            display: none;
+            padding: 30px;
+        }
+        
+        .result-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #4a6fa5;
+            text-align: center;
+        }
+        
+        .result-type {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #f0f5ff;
+            text-align: center;
+        }
+        
+        .result-description {
+            text-align: left;
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #f9fbfd;
+            border-radius: 8px;
+            line-height: 1.7;
+        }
+        
+        .result-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px;
+            margin: 10px;
+            background-color: #f0f5ff;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .recommendations {
+            margin-top: 30px;
+        }
+        
+        .recommendation {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9fbfd;
+            border-radius: 8px;
+            border-left: 4px solid #4a6fa5;
+        }
+        
+        .recommendation h3 {
+            color: #4a6fa5;
+            margin-bottom: 10px;
+        }
+        
+        #restart-btn {
+            background: linear-gradient(135deg, #4a6fa5, #6a98d3);
+            color: white;
+            margin: 20px auto;
+            display: block;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                border-radius: 0;
+            }
+            
+            header {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .question {
+                padding: 15px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            button {
+                width: 100%;
+            }
+            
+            .result-stats {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>父母教养风格测试</h1>
+            <p class="description">通过20道题目，了解您的教养风格类型</p>
+        </header>
+        
+        <div class="instructions">
+            <p><strong>测试说明：</strong>请根据您的实际情况选择最符合的选项。本测试将帮助您了解自己是控制型、权威型、放任型还是忽视型的父母。测试结果仅供参考，不能替代专业评估。</p>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <div class="progress-text" id="progress-text">0/20</div>
+        </div>
+        
+        <div id="test-container">
+            <div class="question-container">
+                <!-- 问题将通过JavaScript动态生成 -->
+            </div>
+            
+            <div class="buttons">
+                <button id="prev-btn" disabled>上一题</button>
+                <button id="next-btn">下一题</button>
+                <button id="submit-btn" style="display: none;">查看结果</button>
+            </div>
+        </div>
+        
+        <div class="result-container" id="result-container">
+            <h2 class="result-title">您的测试结果</h2>
+            <div class="result-type" id="result-type">权威型父母</div>
+            
+            <div class="result-stats">
+                <div class="stat">
+                    <div class="stat-value" id="control-score">0%</div>
+                    <div class="stat-label">控制型倾向</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="authoritative-score">0%</div>
+                    <div class="stat-label">权威型倾向</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="permissive-score">0%</div>
+                    <div class="stat-label">放任型倾向</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="neglectful-score">0%</div>
+                    <div class="stat-label">忽视型倾向</div>
+                </div>
+            </div>
+            
+            <div class="result-description" id="result-description">
+                <!-- 结果描述将通过JavaScript动态生成 -->
+            </div>
+            
+            <div class="recommendations">
+                <h2>个性化建议</h2>
+                <div class="recommendation">
+                    <h3>优势强化</h3>
+                    <p id="strength-advice">您的权威型教养风格有许多优势，继续保持！</p>
+                </div>
+                <div class="recommendation">
+                    <h3>改进方向</h3>
+                    <p id="improvement-advice">在某些情况下，您可以尝试更加灵活地调整您的教养方式。</p>
+                </div>
+                <div class="recommendation">
+                    <h3>实用技巧</h3>
+                    <p id="tips-advice">尝试每周安排一次家庭会议，听取孩子的意见并共同制定规则。</p>
+                </div>
+            </div>
+            
+            <button id="restart-btn">重新测试</button>
+        </div>
+    </div>
+
+    <script>
+        // 测试题目 - 每种类型5道题
+        const questions = [
+            // 控制型题目
+            { text: "我认为孩子应该无条件服从父母的指令", type: "control" },
+            { text: "当孩子不听话时，我会立即采取惩罚措施", type: "control" },
+            { text: "我为孩子制定了严格的时间表和日常规范", type: "control" },
+            { text: "我使用奖励和惩罚来塑造孩子的行为", type: "control" },
+            { text: "我认为父母的主要职责是确保孩子遵守规则", type: "control" },
+            
+            // 权威型题目
+            { text: "我会和孩子讨论家庭规则，并解释为什么这些规则很重要", type: "authoritative" },
+            { text: "我鼓励孩子表达自己的想法，即使与我的观点不同", type: "authoritative" },
+            { text: "我会根据孩子的年龄和能力调整我的期望", type: "authoritative" },
+            { text: "我花时间与孩子沟通，了解他们的想法和感受", type: "authoritative" },
+            { text: "我努力在关爱和规则之间找到平衡", type: "authoritative" },
+            
+            // 放任型题目
+            { text: "我很少对孩子设限，相信孩子会自己学会正确的行为", type: "permissive" },
+            { text: "我通常避免与孩子发生冲突，宁愿让步", type: "permissive" },
+            { text: "我认为孩子有自己的判断力，不需要过多干预", type: "permissive" },
+            { text: "我很少拒绝孩子的要求，尽量满足他们的愿望", type: "permissive" },
+            { text: "我认为严格的规则会限制孩子的创造力", type: "permissive" },
+            
+            // 忽视型题目
+            { text: "我很少有时间关注孩子的日常活动和需求", type: "neglectful" },
+            { text: "我觉得孩子的成长主要靠他们自己，父母干预作用有限", type: "neglectful" },
+            { text: "我很少参与孩子的学习和社交活动", type: "neglectful" },
+            { text: "我对孩子的情感和心理需求关注较少", type: "neglectful" },
+            { text: "我很少与孩子进行深入的沟通和交流", type: "neglectful" }
+        ];
+
+        // 随机打乱题目顺序
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+        
+        // 打乱题目
+        shuffleArray(questions);
+
+        // 答案选项
+        const options = [
+            "非常不同意",
+            "不同意",
+            "中立",
+            "同意",
+            "非常同意"
+        ];
+
+        // 当前问题索引
+        let currentQuestion = 0;
+        
+        // 用户答案存储
+        let userAnswers = Array(questions.length).fill(null);
+
+        // DOM元素
+        const questionContainer = document.querySelector('.question-container');
+        const progressBar = document.getElementById('progress');
+        const progressText = document.getElementById('progress-text');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const testContainer = document.getElementById('test-container');
+        const resultContainer = document.getElementById('result-container');
+        const resultType = document.getElementById('result-type');
+        const controlScore = document.getElementById('control-score');
+        const authoritativeScore = document.getElementById('authoritative-score');
+        const permissiveScore = document.getElementById('permissive-score');
+        const neglectfulScore = document.getElementById('neglectful-score');
+        const resultDescription = document.getElementById('result-description');
+        const strengthAdvice = document.getElementById('strength-advice');
+        const improvementAdvice = document.getElementById('improvement-advice');
+        const tipsAdvice = document.getElementById('tips-advice');
+        const restartBtn = document.getElementById('restart-btn');
+
+        // 初始化测试
+        function initTest() {
+            renderQuestion();
+            updateProgress();
+        }
+
+        // 渲染当前问题
+        function renderQuestion() {
+            const question = questions[currentQuestion];
+            
+            let optionsHTML = '';
+            options.forEach((option, index) => {
+                const isSelected = userAnswers[currentQuestion] === index;
+                optionsHTML += `
+                    <div class="option ${isSelected ? 'selected' : ''}" data-index="${index}">
+                        <input type="radio" name="answer" id="option-${index}" ${isSelected ? 'checked' : ''}>
+                        <label for="option-${index}">${option}</label>
+                    </div>
+                `;
+            });
+            
+            questionContainer.innerHTML = `
+                <div class="question">
+                    <div class="question-number">问题 ${currentQuestion + 1}/20</div>
+                    <div class="question-text">${question.text}</div>
+                    <div class="options">${optionsHTML}</div>
+                </div>
+            `;
+            
+            // 添加选项点击事件
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const selectedIndex = parseInt(this.getAttribute('data-index'));
+                    userAnswers[currentQuestion] = selectedIndex;
+                    
+                    // 更新UI
+                    document.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    
+                    // 更新按钮状态
+                    updateButtons();
+                });
+            });
+            
+            // 更新按钮状态
+            updateButtons();
+        }
+
+        // 更新进度条
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `${currentQuestion + 1}/${questions.length}`;
+        }
+
+        // 更新按钮状态
+        function updateButtons() {
+            prevBtn.disabled = currentQuestion === 0;
+            
+            if (currentQuestion === questions.length - 1) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'block';
+                submitBtn.disabled = userAnswers[currentQuestion] === null;
+            } else {
+                nextBtn.style.display = 'block';
+                submitBtn.style.display = 'none';
+                nextBtn.disabled = userAnswers[currentQuestion] === null;
+            }
+        }
+
+        // 下一题
+        nextBtn.addEventListener('click', function() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                renderQuestion();
+                updateProgress();
+            }
+        });
+
+        // 上一题
+        prevBtn.addEventListener('click', function() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+                updateProgress();
+            }
+        });
+
+        // 提交测试
+        submitBtn.addEventListener('click', function() {
+            calculateResults();
+            testContainer.style.display = 'none';
+            resultContainer.style.display = 'block';
+        });
+
+        // 重新测试
+        restartBtn.addEventListener('click', function() {
+            currentQuestion = 0;
+            userAnswers = Array(questions.length).fill(null);
+            testContainer.style.display = 'block';
+            resultContainer.style.display = 'none';
+            initTest();
+        });
+
+        // 计算结果
+        function calculateResults() {
+            let controlScoreValue = 0;
+            let authoritativeScoreValue = 0;
+            let permissiveScoreValue = 0;
+            let neglectfulScoreValue = 0;
+            let totalAnswered = 0;
+            
+            userAnswers.forEach((answer, index) => {
+                if (answer !== null) {
+                    totalAnswered++;
+                    const question = questions[index];
+                    const score = answer + 1; // 将0-4转换为1-5
+                    
+                    if (question.type === "control") {
+                        controlScoreValue += score;
+                    } else if (question.type === "authoritative") {
+                        authoritativeScoreValue += score;
+                    } else if (question.type === "permissive") {
+                        permissiveScoreValue += score;
+                    } else if (question.type === "neglectful") {
+                        neglectfulScoreValue += score;
+                    }
+                }
+            });
+            
+            // 计算百分比
+            const maxPossibleScore = totalAnswered * 5;
+            const controlPercent = Math.round((controlScoreValue / maxPossibleScore) * 100);
+            const authoritativePercent = Math.round((authoritativeScoreValue / maxPossibleScore) * 100);
+            const permissivePercent = Math.round((permissiveScoreValue / maxPossibleScore) * 100);
+            const neglectfulPercent = Math.round((neglectfulScoreValue / maxPossibleScore) * 100);
+            
+            // 显示结果
+            displayResults(controlPercent, authoritativePercent, permissivePercent, neglectfulPercent);
+        }
+
+        // 显示结果
+        function displayResults(control, authoritative, permissive, neglectful) {
+            // 设置不同风格的颜色
+            controlScore.style.color = '#d9534f';
+            authoritativeScore.style.color = '#5cb85c';
+            permissiveScore.style.color = '#f0ad4e';
+            neglectfulScore.style.color = '#777';
+            
+            // 更新分数显示
+            controlScore.textContent = `${control}%`;
+            authoritativeScore.textContent = `${authoritative}%`;
+            permissiveScore.textContent = `${permissive}%`;
+            neglectfulScore.textContent = `${neglectful}%`;
+            
+            // 确定主要教养风格
+            const scores = [
+                { type: "控制型", value: control, color: "#d9534f" },
+                { type: "权威型", value: authoritative, color: "#5cb85c" },
+                { type: "放任型", value: permissive, color: "#f0ad4e" },
+                { type: "忽视型", value: neglectful, color: "#777" }
+            ];
+            
+            // 按分数排序
+            scores.sort((a, b) => b.value - a.value);
+            const primaryStyle = scores[0];
+            
+            let description = "";
+            let strengthText = "";
+            let improvementText = "";
+            let tipsText = "";
+            
+            if (primaryStyle.type === "权威型") {
+                description = `
+                    <p>您的教养风格主要是<strong>权威型</strong>。这种风格的父母既对孩子有合理的要求，又给予孩子充分的关爱和自主权。</p>
+                    <p><strong>主要特点：</strong></p>
+                    <ul>
+                        <li>设定明确的规则和期望，但会解释规则的原因</li>
+                        <li>尊重孩子的意见，鼓励独立思考和表达</li>
+                        <li>使用积极的纪律方法，如讨论和引导</li>
+                        <li>在关爱和规则之间找到平衡</li>
+                    </ul>
+                    <p><strong>影响：</strong>研究表明，权威型教养方式培养的孩子通常更自信、有责任感、社交能力强，并且在学业上表现更好。</p>
+                `;
+                strengthText = "您已经在建立健康的亲子关系方面做得很好，继续保持开放沟通和合理规则设定的平衡。";
+                improvementText = "虽然您的教养方式已经很理想，但可以尝试在某些情况下给予孩子更多自主决策的机会，培养他们的独立性。";
+                tipsText = "尝试每周安排一次家庭会议，让每个家庭成员都有机会表达自己的想法和感受，共同制定家庭规则。";
+            } else if (primaryStyle.type === "控制型") {
+                description = `
+                    <p>您的教养风格主要是<strong>控制型</strong>（也称为专制型）。这种风格的父母强调规则和服从，对孩子的要求高但回应较少。</p>
+                    <p><strong>主要特点：</strong></p>
+                    <ul>
+                        <li>制定严格的规则，期望孩子无条件服从</li>
+                        <li>较少解释规则的原因或考虑孩子的意见</li>
+                        <li>倾向于使用惩罚而非引导来纠正行为</li>
+                        <li>对孩子的情感需求回应较少</li>
+                    </ul>
+                    <p><strong>影响：</strong>控制型教养方式下的孩子可能更守规矩，但也可能缺乏自信、独立性差，或者在青春期出现更强烈的反抗行为。</p>
+                `;
+                strengthText = "您对孩子的成长有明确的期望和标准，这有助于孩子理解界限和规则的重要性。";
+                improvementText = "尝试更多地倾听孩子的想法和感受，给予他们表达意见的机会，并在制定规则时解释原因。";
+                tipsText = "当孩子不听话时，尝试先了解他们的想法，而不是立即采取惩罚措施。使用'我'语句表达您的感受，例如'当你这样做时，我感到担心'。";
+            } else if (primaryStyle.type === "放任型") {
+                description = `
+                    <p>您的教养风格主要是<strong>放任型</strong>（也称为宽容型）。这种风格的父母对孩子的要求较少，但回应较多，倾向于满足孩子的愿望。</p>
+                    <p><strong>主要特点：</strong></p>
+                    <ul>
+                        <li>设定很少的规则或限制</li>
+                        <li>避免冲突，倾向于让步</li>
+                        <li>更多地作为朋友而非权威人物</li>
+                        <li>对孩子的情感需求高度回应</li>
+                    </ul>
+                    <p><strong>影响：</strong>放任型教养方式下的孩子可能更有创造力和自我表达能力强，但也可能缺乏自律、难以遵守规则，并且可能在面对挫折时表现较差。</p>
+                `;
+                strengthText = "您与孩子之间有很强的感情连接，孩子感到被爱和被接受，这是非常宝贵的。";
+                improvementText = "尝试为孩子设立一些明确的、合理的规则和界限，并坚持执行，这有助于孩子发展自律能力和责任感。";
+                tipsText = "制定3-5个家庭基本规则，与孩子讨论这些规则的重要性，并一致地执行。当孩子测试界限时，温和但坚定地坚持规则。";
+            } else {
+                description = `
+                    <p>您的教养风格主要是<strong>忽视型</strong>。这种风格的父母对孩子的要求和回应都较少，很少参与孩子的成长过程。</p>
+                    <p><strong>主要特点：</strong></p>
+                    <ul>
+                        <li>很少关注孩子的需求和活动</li>
+                        <li>很少与孩子沟通或参与他们的生活</li>
+                        <li>对孩子的情感和心理需求关注较少</li>
+                        <li>可能因工作或其他原因而忽视孩子的成长</li>
+                    </ul>
+                    <p><strong>影响：</strong>忽视型教养方式下的孩子可能感到被忽视，缺乏安全感和自我价值感，可能在学业、社交和情感发展上遇到困难。</p>
+                `;
+                strengthText = "您可能在其他方面（如工作）表现出色，为孩子提供了物质保障。";
+                improvementText = "尝试增加与孩子的互动时间，即使每天只有15-30分钟的高质量陪伴，也能显著改善亲子关系。";
+                tipsText = "安排固定的亲子时间，如共进晚餐、一起阅读或散步，并在这段时间内专注于孩子，避免分心。";
+            }
+            
+            resultType.textContent = primaryStyle.type + "父母";
+            resultType.style.color = primaryStyle.color;
+            resultDescription.innerHTML = description;
+            strengthAdvice.textContent = strengthText;
+            improvementAdvice.textContent = improvementText;
+            tipsAdvice.textContent = tipsText;
+        }
+
+        // 初始化测试
+        initTest();
+    </script>
+</body>
+</html>
